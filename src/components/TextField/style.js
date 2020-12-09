@@ -1,4 +1,4 @@
-const validField = {
+ const validField = {
     margin: '5px',
   };
   export const errorField = {
