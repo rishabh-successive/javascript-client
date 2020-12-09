@@ -22,12 +22,6 @@
         "test:c": "npm run test -- --coverage",
         "commit": "npx git-cz"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "npm run lint",
-            "pre-push": "npm run lint "
-        }
-    },
     "eslintConfig": {
         "extends": [
             "react-app",
