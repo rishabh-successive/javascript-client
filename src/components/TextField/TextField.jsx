@@ -1,40 +1,54 @@
-/* eslint-disable react/destructuring-assignment */
-import React from 'react';
-import validField, { errorField, color } from './style';
+import React, { Component } from 'react';
+import validField, { disabledField, errorField,  } from './style';
 
-function TextField(props) {
-  if (props.value) {
-    return (
-      <span>
-        A valid TextField:
-        <br />
-        <input type="text" style={validField} />
-        <br />
-      </span>
-    );
-  }
-  if (props.disabled) {
-    return (
-      <span>
-        This is a Disabled input:
-        <br />
-        <input type="text" style={validField} value="Disabled Input" disabled={props.disabled} />
-        <br />
-      </span>
-    );
+class TextField extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
   }
 
-  if (props.error) {
-    return (
-      <span>
-        An error TextField:
-        <br />
-        <input type="text" style={errorField} value="101" />
-        <br/>
-        <span style={ color}>Could not be greater than</span>
-      </span>
+  render() {
+    if (this.props.value) {
+      return (
+        <span>
+          <b>A Valid Input</b>
+          <br />
+          <br />
+          <input type="text" style={validField} defaultValue={this.props.value} />
+          <br />
+        </span>
+      );
+    }
+    else if (this.props.disabled) {
+      return (
+        <span>
+          <b>This is a Disabled Input</b>
+          <br />
+          <br />
+          <input type="text"  value="Disabled Input" disabled={this.props.disabled} />
+          <br />
+        </span>
+      );
+    }
 
+    else if (this.props.error) {
+      return (
+        <span>
+          <b>An input with errors</b>
+          <br />
+          <br />
+          <input type="text" style={errorField} value="101" />
+          <br />
+         
+          
+        </span>
+      );
+    }
+
+    return (
+      <span />
     );
   }
 }
+
 export default TextField;

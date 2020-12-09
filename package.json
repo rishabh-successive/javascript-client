@@ -2,7 +2,6 @@
     "name": "training",
     "version": "1.0.0",
     "private": true,
-  
     "dependencies": {
         "@testing-library/jest-dom": "^5.11.6",
         "@testing-library/react": "^11.2.2",
@@ -21,6 +20,12 @@
         "lint:fix": "eslint src --fix",
         "test:c": "npm run test -- --coverage",
         "commit": "npx git-cz"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "npm run lint",
+            "pre-push": "npm run lint "
+        }
     },
     "eslintConfig": {
         "extends": [
