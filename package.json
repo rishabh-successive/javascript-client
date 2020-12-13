@@ -47,6 +47,7 @@
         ]
     },
     "devDependencies": {
+        "babel-eslint": "^10.1.0",
         "eslint-config-airbnb": "^18.2.1",
         "husky": "^4.3.5"
     }

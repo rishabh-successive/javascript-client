@@ -1,54 +1,50 @@
-import React, { Component } from 'react';
-import validField, { disabledField, errorField,  } from './style';
 
-class TextField extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+/* eslint-disable no-const-assign */
+import React from "react";
+import PropTypes from 'prop-types';
+import validField, { errorField, color } from "./style";
+
+function TextField(props) {
+
+  const { value, disabled, error, onChange } = props;
+
+  let inputProps = {}
+  let heading = '';
+
+  if(value) {
+    heading = 'A valid Input'
+    inputProps = { style: validField, defaultValue: value, onChange: onChange }
+  }
+  else if(disabled) {
+    heading = 'This is a Disabled Input'
+    inputProps = {  value: value, disabled: disabled }
+  }
+  else if(error) {
+    heading = 'An input with errors'
+    inputProps = {  style: errorField , value: "101", onChange: onChange }
   }
 
-  render() {
-    if (this.props.value) {
-      return (
-        <span>
-          <b>A Valid Input</b>
-          <br />
-          <br />
-          <input type="text" style={validField} defaultValue={this.props.value} />
-          <br />
-        </span>
-      );
-    }
-    else if (this.props.disabled) {
-      return (
-        <span>
-          <b>This is a Disabled Input</b>
-          <br />
-          <br />
-          <input type="text"  value="Disabled Input" disabled={this.props.disabled} />
-          <br />
-        </span>
-      );
-    }
+  return (
+    <span>
+      <b>{heading}</b>
+      <br />
+      <input type="text" {...inputProps} />
+      <br />
+      {error &&(<span style={color}>Could Not be Greater than 100</span>)}
+    </span>
+  );
 
-    else if (this.props.error) {
-      return (
-        <span>
-          <b>An input with errors</b>
-          <br />
-          <br />
-          <input type="text" style={errorField} value="101" />
-          <br />
-         
-          
-        </span>
-      );
-    }
-
-    return (
-      <span />
-    );
-  }
 }
 
+TextField.propTypes = {
+  value: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+};
+
+TextField.defaultProps = {
+  error: '',
+  disabled: false,
+};
 export default TextField;
