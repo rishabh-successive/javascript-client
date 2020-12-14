@@ -1,4 +1,3 @@
-
 /* eslint-disable no-const-assign */
 import React from "react";
 import PropTypes from 'prop-types';
@@ -6,14 +5,14 @@ import validField, { errorField, color } from "./style";
 
 function TextField(props) {
 
-  const { value, disabled, error, onChange } = props;
+  const { value, disabled, error, onChange, onBlur } = props;
 
   let inputProps = {}
   let heading = '';
 
   if(value) {
     heading = 'A valid Input'
-    inputProps = { style: validField, defaultValue: value, onChange: onChange }
+    inputProps = { style: validField, defaultValue: value, onChange: onChange, onBlur: onBlur }
   }
   else if(disabled) {
     heading = 'This is a Disabled Input'
@@ -21,7 +20,7 @@ function TextField(props) {
   }
   else if(error) {
     heading = 'An input with errors'
-    inputProps = {  style: errorField , value: "101", onChange: onChange }
+    inputProps = {  style: errorField , value: "101", onChange: onChange,  onBlur: onBlur }
   }
 
   return (
@@ -30,7 +29,7 @@ function TextField(props) {
       <br />
       <input type="text" {...inputProps} />
       <br />
-      {error &&(<span style={color}>Could Not be Greater than 100</span>)}
+      {error &&(<span style={color}>{error}</span>)}
     </span>
   );
 
@@ -41,10 +40,12 @@ TextField.propTypes = {
   error: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
 };
 
 TextField.defaultProps = {
   error: '',
   disabled: false,
+  onBlur: () => {},
 };
 export default TextField;

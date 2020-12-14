@@ -1,4 +1,3 @@
-
 export function getRandomNumber(max) {
     let no = Math.random();
     no = Math.round((no * 10) % max)
