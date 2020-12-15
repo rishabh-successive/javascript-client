@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getRandomNumber, getNextRoundRobin } from '../../../lib/utils';
+import { getRandomNumber, getNextRoundRobin } from '../../lib/utils/math';
 import { PUBLIC_IMAGE_FOLDER, DEFAULT_BANNER_IMAGE } from '../../config/ constants';
 import center from './style';
 
-class Slider extends Component {
+class Slide extends Component {
   id
   constructor(props) {
 
@@ -56,7 +56,7 @@ class Slider extends Component {
   }
 }
 
-Slider.propTypes = {
+Slide.propTypes = {
   altText: PropTypes.string,
   defaultBanner: PropTypes.string,
   duration: PropTypes.number,
@@ -65,7 +65,7 @@ Slider.propTypes = {
   banner: PropTypes.arrayOf(PropTypes.string),
 };
 
-Slider.defaultProps = { 
+Slide.defaultProps = { 
   altText: 'Default Banner',
   defaultBanner: 'default.png',
   duration: 2000,
@@ -74,4 +74,4 @@ Slider.defaultProps = {
   banner: [],
 };
 
-export default Slide
+export default Slide;
