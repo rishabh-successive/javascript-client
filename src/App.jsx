@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
-import { TextFieldDemo, InputDemo } from './pages'
+import React from 'react';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { ChildrenDemo } from './pages';
+import theme from './theme';
 
-class App extends Component {
-  render() {
-    return (
-      <>
-        <InputDemo />
-      </>
-
-    );
-  }
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <ChildrenDemo />
+    </ThemeProvider>
+  );
 }
 
 export default App;

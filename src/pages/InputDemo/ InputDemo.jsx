@@ -12,7 +12,7 @@ import {
   cricketStr,
   footballOptions,
   footballStr,
-} from '../../config/ constants';
+} from '../../config/constants';
 
 class InputDemo extends Component {
   schema = yup.object().shape({
