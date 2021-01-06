@@ -6,10 +6,6 @@ const callApi = async (route, method, body) => {
     method,
     url: BASE_URL + route,
     data: body,
-    proxy: {
-      host: 'localhost',
-      port: 9000,
-    },
   });
   return response;
 };

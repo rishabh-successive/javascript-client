@@ -116,7 +116,7 @@ class Login extends Component {
           progress: false,
         });
         console.log(err.response.data.message);
-        openSnackBar(err.response.data.message, 'error');
+        openSnackBar(err.response.data.err, 'error');
       });
   }
 
