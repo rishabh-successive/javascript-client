@@ -1,14 +1,30 @@
-import React from "react";
-import { TextField } from "../../components";
+import React from 'react';
+import { TextField, Slider } from '../../components';
 
 function TextFieldDemo(props) {
-  return(
+  return (
     <fieldset>
-      <TextField value = "valid text field"/>
+      <div>
+        <Slider
+          banner={
+            [
+              'load-balancer.png',
+              'full-stack-web-development.jpg',
+              'js.jpg',
+              'dns-server.png',
+              'cloud.jpg',
+            ]
+          }
+          altText="Banner"
+          duration={1000}
+          random={false}
+        />
+      </div>
+      <TextField value="valid text field" />
       <TextField disabled = { true } />
-      <TextField error = "error field"/>
+      <TextField error="Could not greater than" />
     </fieldset>
-  )
+  );
 }
 
-export default TextFieldDemo
+export default TextFieldDemo;

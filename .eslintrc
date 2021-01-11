@@ -20,14 +20,12 @@
     "plugins": [
         "react"
     ],
+    
     "rules": {
         "no-empty": 0,
         "no-irregular-whitespace": 0,
         "import/prefer-default-export": "off",
-        "indent": [
-            2,
-            2
-        ],
+        "indent": "off",
         "react/jsx-indent": [
             "error",
             2
