@@ -12,4 +12,9 @@ export const color = {
   color: 'red',
 };
 
+export const errorField = {
+  ...validField,
+  border: 'solid red',
+};
+
 export default validField;

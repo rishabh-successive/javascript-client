@@ -21,8 +21,8 @@ function TextFieldDemo(props) {
         />
       </div>
       <TextField value="valid text field" onChange={() => {}}  />
-      <TextField disabled value="Disabled Input" onChange={() => {}} />
-      <TextField value="" error="101" onChange={() => {}} />
+      <TextField textVal value="Accessible" onChange={() => {}} />
+      <TextField textVal value="" error="101" onChange={() => {}} />
     </fieldset>
   );
 }
