@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getRandomNumber, getNextRoundRobin } from '../../lib/utils/math';
-import { PUBLIC_IMAGE_FOLDER, DEFAULT_BANNER_IMAGE } from '../../config/ constants';
+import { PUBLIC_IMAGE_FOLDER, DEFAULT_BANNER_IMAGE } from '../../config/constants';
 import center from './style';
 
 class Slide extends Component {
