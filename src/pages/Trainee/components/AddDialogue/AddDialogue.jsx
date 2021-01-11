@@ -161,7 +161,7 @@ class AddDialogue extends Component {
         progress: true,
       });
       const header = localStorage.getItem('token');
-      await callApi('/trainee', 'POST', {
+      await callApi('/user', 'POST', {
         id, name, email, password,
       }, header)
         .then((response) => {

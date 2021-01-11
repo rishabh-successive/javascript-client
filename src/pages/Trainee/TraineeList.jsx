@@ -40,11 +40,11 @@ class TraineeList extends React.Component {
       limit,
     };
     this.setState({ loader: true });
-    await callApi('/trainee', 'GET', {}, header, params)
+    await callApi('/user', 'GET', {}, header, params)
       .then((data) => {
         this.setState({
-          records: data.data.Trainees.data.records,
-          totalRecords: data.data.Trainees.data.count,
+          records: data.data.data.records,
+          totalRecords: data.data.data.count,
         });
       })
       .catch((err) => {

@@ -100,11 +100,13 @@ class Login extends Component {
     });
     await callApi('/user/login', 'POST', { email, password })
       .then((response) => {
-        localStorage.setItem('token', response.data.data);
+        console.log(response);
+        localStorage.setItem('token', response.data.token);
         openSnackBar('Login Successfull!', 'success');
         history.push('/trainee');
       })
       .catch((err) => {
+        console.log('error', err);
         this.setState({
           email: '',
           password: '',
@@ -115,8 +117,7 @@ class Login extends Component {
           },
           progress: false,
         });
-        console.log(err.response.data.message);
-        openSnackBar(err.response.data.err, 'error');
+        openSnackBar(err.response.data.message, 'error');
       });
   }
 
