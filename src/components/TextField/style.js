@@ -1,8 +1,15 @@
+export const disabledField = {
+  padding: '5px',
+  width: '94%',
+  height: '25px',
+};
+
 const validField = {
-  margin: "5px"
-}
-export const errorField = {
-  ...validField,
-  border: "1px solid red"
-}
+  ...disabledField,
+};
+
+export const color = {
+  color: 'red',
+};
+
 export default validField;

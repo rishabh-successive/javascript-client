@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { TextFieldDemo } from './pages'
+import { TextFieldDemo, InputDemo } from './pages'
 
 class App extends Component {
   render() {
     return (
-      <TextFieldDemo />
+      <>
+        <InputDemo />
+      </>
+
     );
   }
 }

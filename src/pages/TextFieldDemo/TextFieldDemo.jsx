@@ -20,9 +20,9 @@ function TextFieldDemo(props) {
           random={false}
         />
       </div>
-      <TextField value="valid text field" />
-      <TextField disabled = { true } />
-      <TextField error="Could not greater than" />
+      <TextField value="valid text field" onChange={() => {}}  />
+      <TextField disabled value="Disabled Input" onChange={() => {}} />
+      <TextField value="" error="101" onChange={() => {}} />
     </fieldset>
   );
 }

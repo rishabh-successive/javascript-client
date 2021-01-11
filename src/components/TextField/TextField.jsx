@@ -1,54 +1,47 @@
-import React, { Component } from 'react';
-import validField, { disabledField, errorField,  } from './style';
+import React from 'react';
+import PropTypes from 'prop-types';
+import validField, { color, disabledField } from './style';
 
-class TextField extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    if (this.props.value) {
-      return (
-        <span>
-          <b>A Valid Input</b>
-          <br />
-          <br />
-          <input type="text" style={validField} defaultValue={this.props.value} />
-          <br />
-        </span>
-      );
-    }
-    else if (this.props.disabled) {
-      return (
-        <span>
-          <b>This is a Disabled Input</b>
-          <br />
-          <br />
-          <input type="text"  value="Disabled Input" disabled={this.props.disabled} />
-          <br />
-        </span>
-      );
-    }
-
-    else if (this.props.error) {
-      return (
-        <span>
-          <b>An input with errors</b>
-          <br />
-          <br />
-          <input type="text" style={errorField} value="101" />
-          <br />
-         
-          
-        </span>
-      );
-    }
-
+function TextField(props) {
+  const {
+    value, error, onChange, disabled, onBlur,
+  } = props;
+  if (disabled) {
     return (
-      <span />
+      <span>
+        <input type="text" style={disabledField} value={value} disabled={disabled} />
+        <br />
+      </span>
     );
   }
+  return (
+    <span>
+      <input
+        type="text"
+        style={validField}
+        defaultValue={value}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+      <br />
+      {error ? <p style={color}>{error}</p> : ''}
+      <br />
+    </span>
+  );
 }
+
+TextField.propTypes = {
+  value: PropTypes.string.isRequired,
+  error: PropTypes.string,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
+};
+
+TextField.defaultProps = {
+  error: '',
+  disabled: false,
+  onBlur: () => {},
+};
 
 export default TextField;
