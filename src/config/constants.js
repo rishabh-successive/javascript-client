@@ -24,3 +24,5 @@ export const footballOptions = [
 
 export const footballStr = 'football';
 export const cricketStr = 'cricket';
+
+export const limit = 20;

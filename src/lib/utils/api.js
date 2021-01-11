@@ -1,11 +1,16 @@
 import axios from 'axios';
 
-const callApi = async (route, method, body) => {
+const callApi = async (route, method, body, header, params) => {
   const BASE_URL = 'http://localhost:7000/api';
   const response = await axios({
     method,
-    url: BASE_URL + route,
+    baseURL: BASE_URL,
+    url: route,
     data: body,
+    headers: {
+      authorization: header,
+    },
+    params,
   });
   return response;
 };
