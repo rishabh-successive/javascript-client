@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-
 import { Table } from '../../components';
+import trainee from './data/trainee';
 import callApi from '../../lib/utils/api';
-import { limit } from '../../config/constants';
+import { limit }  from '../../config/constants';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 import { AddDialogue, EditDialog, RemoveDialog } from './components';
 
-class TraineeList extends React.Component {
+class TraineeList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,64 +25,95 @@ class TraineeList extends React.Component {
       totalRecords: 0,
       page: 0,
       loader: false,
+      limit,
     };
+    // this.handleEventDialogOpen=this.handleEventDialogOpen.bind(this);
   }
 
   componentDidMount() {
     this.getData();
   }
 
-  getData = async () => {
+  getData =  () => {
     const header = localStorage.getItem('token');
-    const { page } = this.state;
+    const { page: statePage } = this.state;
     const params = {
-      skip: page * limit,
+      skip: statePage * limit,
       limit,
     };
     this.setState({ loader: true });
-    await callApi('/user', 'GET', {}, header, params)
+    callApi('/trainee/getall', 'GET', {}, header, params)
       .then((data) => {
         this.setState({
-          records: data.data.data.records,
-          totalRecords: data.data.data.count,
+          records: data.data.Trainees.data.records,
+          totalRecords: data.data.Trainees.data.count,
+        }, () => {
+          const { records } = this.state;
+          if (records.length === 0 && statePage) {
+            this.setState({ page: statePage - 1 }, () => this.getData());
+          }
         });
       })
       .catch((err) => {
-        if (err.response.data.status === 401) {
-          localStorage.removeItem('token');
-        }
+        // if (err.response.data.code === 401) {
+        localStorage.removeItem('token');
+        // }
       });
     this.setState({ loader: false });
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  handleAllEvents = (condition) => {
+    this.setState({ open: condition });
   };
+  // handleDeleteClose = () => {
+  //   this.setState({ deleteOpen: false });
+  // }
 
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  // handleEditClose = () => {
+  //   this.setState({ editOpen: false });
+  // }
 
-  handleDeleteClose = () => {
-    this.setState({ deleteOpen: false });
+  handleDialogEvents = (condition) => {
+    this.setState((prevState) => ({
+      ...prevState, [condition]: false, }));
   }
 
-  handleEditClose = () => {
-    this.setState({ editOpen: false });
+
+  handleEventDialogOpen = (data, condition) => (event) => {
+    event.preventDefault;
+    this.setState((prevState) => ({
+      ...prevState, [condition]: true, traineeData: data
+    }));
   }
 
-  handleEditDialogOpen = (event, data) => {
-    event.preventDefault();
-    this.setState({ editOpen: true, traineeData: data });
-  }
+  // handleEditDialogOpen = (event, data) => {
+  //   event.preventDefault();
+  //   this.setState({ editOpen: true, traineeData: data });
+  // }
 
-  handleRemoveDialogOpen = (event, data) => {
-    event.preventDefault();
-    this.setState({ deleteOpen: true, traineeData: data });
-  };
+  // handleRemoveDialogOpen = (event, data) => {
+  //   event.preventDefault();
+  //   this.setState({ deleteOpen: true, traineeData: data });
+  // };
+
+  handleChangePage = (event, page) => {
+    this.setState({ page });
+  }
+  handleChangeLimit = (event) => {
+    this.setState({ limit: event.target.value });
+  }
 
   handleSubmit = (temp) => {
-    this.setState({ open: false });
+    this.setState({ open: false }, () => this.getData());
+  }
+
+  handleDeleteSubmit = () => {
+    this.setState({ deleteOpen: false }, () => {
+      this.getData();
+    });
+  }
+  handleEditSubmit = () => {
+    this.setState({ editOpen: false });
     this.getData();
   }
 
@@ -138,6 +169,7 @@ class TraineeList extends React.Component {
     history.push(`${match.path}/${id}`, { skip, limit });
   }
 
+
   render() {
     const {
       open,
@@ -145,6 +177,7 @@ class TraineeList extends React.Component {
       orderBy,
       traineeData, page, deleteOpen, editOpen, records, totalRecords, loader,
     } = this.state;
+
     return (
       <>
         <br />
@@ -152,7 +185,7 @@ class TraineeList extends React.Component {
           <Button
             variant="outlined"
             color="primary"
-            onClick={this.handleClickOpen}
+            onClick={() => this.handleAllEvents(true)}
           >
             ADD TRAINEELIST
           </Button>
@@ -182,11 +215,11 @@ class TraineeList extends React.Component {
           actions={[
             {
               icon: <EditIcon />,
-              handler: this.handleEditDialogOpen,
+              handler: this.handleEventDialogOpen(traineeData,'editOpen'),
             },
             {
               icon: <DeleteIcon />,
-              handler: this.handleRemoveDialogOpen,
+              handler:  this.handleEventDialogOpen(traineeData,'deleteOpen'),
             },
           ]}
           order={order}
@@ -203,17 +236,18 @@ class TraineeList extends React.Component {
         {this.renderTrainees()}
         <AddDialogue
           open={open}
-          onClose={this.handleClose}
+          onClose={() => this.handleAllEvents(false)}
           onSubmit={this.handleSubmit}
         />
         <RemoveDialog
           deleteOpen={deleteOpen}
-          onClose={this.handleDeleteClose}
+          onClose={()=> this.handleDialogEvents('deleteOpen')}
           details={traineeData}
         />
         <EditDialog
           editOpen={editOpen}
-          onClose={this.handleEditClose}
+          onClose={() => this.handleDialogEvents('editOpen')}
+          onSubmit={this.handleEditSubmit}
           details={traineeData}
         />
       </>
