@@ -1,15 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+
 import { Table } from '../../components';
-import trainee from './data/trainee';
+import callApi from '../../lib/utils/api';
+import { limit } from '../../config/constants';
 import { getDateFormatted } from '../../lib/utils/getDateFormatted';
 import { AddDialogue, EditDialog, RemoveDialog } from './components';
 
-class TraineeList extends Component {
+class TraineeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,10 +20,40 @@ class TraineeList extends Component {
       orderBy: props.orderBy,
       deleteOpen: false,
       editOpen: false,
-      traineeData: '',
+      traineeData: {},
+      records: [],
+      totalRecords: 0,
       page: 0,
+      loader: false,
     };
   }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    const header = localStorage.getItem('token');
+    const { page } = this.state;
+    const params = {
+      skip: page * limit,
+      limit,
+    };
+    this.setState({ loader: true });
+    await callApi('/user', 'GET', {}, header, params)
+      .then((data) => {
+        this.setState({
+          records: data.data.data.records,
+          totalRecords: data.data.data.count,
+        });
+      })
+      .catch((err) => {
+        if (err.response.data.status === 401) {
+          localStorage.removeItem('token');
+        }
+      });
+    this.setState({ loader: false });
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -49,32 +81,35 @@ class TraineeList extends Component {
     this.setState({ deleteOpen: true, traineeData: data });
   };
 
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  }
-
   handleSubmit = (temp) => {
     this.setState({ open: false });
+    this.getData();
   }
 
   renderTrainee = (item, index) => {
     const { match } = this.props;
+    const { page } = this.state;
+    const skip = page * limit;
     return (
       <li key={index}>
-        <Link to={`${match.path}/${item.id}`}>
+        <Link to={{ pathname: `${match.path}/${item.id}`, state: { skip, limit } }}>
           {item.name}
         </Link>
       </li>
     );
   }
 
-  renderTrainees = () => (
-    <ul>
-      {
-        trainee.map((item, index) => this.renderTrainee(item, index))
-      }
-    </ul>
-  )
+  renderTrainees = () => {
+    const { records } = this.state;
+    return (
+      <ul>
+        {
+          records.map((item, index) => this.renderTrainee(item, index))
+        }
+      </ul>
+    );
+  }
+
   handleSort = (field) => {
     const { order, orderBy } = this.state;
     if (orderBy !== field) {
@@ -90,16 +125,25 @@ class TraineeList extends Component {
     }
   }
 
-  handleSelect = (event, id) => {
-    const { history, match } = this.props;
+  handleChangePage = (event, page) => {
     event.preventDefault();
-    history.push(`${match.path}/${id}`);
+    this.setState({ page }, () => this.getData());
   }
 
+  handleSelect = (event, id) => {
+    const { history, match } = this.props;
+    const { page } = this.state;
+    const skip = page * limit;
+    event.preventDefault();
+    history.push(`${match.path}/${id}`, { skip, limit });
+  }
 
   render() {
     const {
-      open, order, orderBy, traineeData, page, deleteOpen, editOpen,
+      open,
+      order,
+      orderBy,
+      traineeData, page, deleteOpen, editOpen, records, totalRecords, loader,
     } = this.state;
     return (
       <>
@@ -115,13 +159,12 @@ class TraineeList extends Component {
         </div>
         <Table
           id="id"
-          data={trainee}
+          data={records}
           columns={
             [
               {
                 field: 'name',
                 label: 'Name',
-                
               },
               {
                 field: 'email',
@@ -150,10 +193,12 @@ class TraineeList extends Component {
           orderBy={orderBy}
           onSort={this.handleSort}
           onSelect={this.handleSelect}
-          count={100}
-          rowsPerPage={5}
+          count={totalRecords}
+          rowsPerPage={limit}
           page={page}
           onChangePage={this.handleChangePage}
+          loader={loader}
+          dataLength={totalRecords}
         />
         {this.renderTrainees()}
         <AddDialogue
@@ -178,7 +223,11 @@ class TraineeList extends Component {
 TraineeList.propTypes = {
   match: PropTypes.objectOf(PropTypes.any).isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
+  order: PropTypes.string,
+  orderBy: PropTypes.string,
+};
+TraineeList.defaultProps = {
+  orderBy: '',
+  order: 'asc',
 };
 export default TraineeList;
