@@ -68,7 +68,7 @@ const check = (item, classes) => (
 
 const getTrainee = async (id, skip, limit) => {
   let result;
-  await callApi('/trainee', 'GET', {}, localStorage.getItem('token'), { skip, limit })
+  await callApi('/user/getall', 'GET', {}, localStorage.getItem('token'), { skip, limit })
     .then((data) => {
       data.data.Trainees.data.records.forEach((res) => {
         if (res.id === id) {

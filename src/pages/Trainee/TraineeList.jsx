@@ -42,11 +42,12 @@ class TraineeList extends Component {
       limit,
     };
     this.setState({ loader: true });
-    callApi('/trainee/getall', 'GET', {}, header, params)
+    callApi('/user/getall', 'GET', {}, header, params)
       .then((data) => {
+        console.log('response', data);
         this.setState({
-          records: data.data.Trainees.data.records,
-          totalRecords: data.data.Trainees.data.count,
+          records: data.Trainees.data.records,
+          totalRecords: data.Trainees.data.count,
         }, () => {
           const { records } = this.state;
           if (records.length === 0 && statePage) {

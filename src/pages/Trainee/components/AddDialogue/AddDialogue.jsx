@@ -192,7 +192,7 @@ class AddDialogue extends Component {
           this.setState({
             progress: false,
           });
-          openSnackBar(err.response.data.message, 'error');
+          openSnackBar(err.response.data.err, 'error');
         });
     }
 
