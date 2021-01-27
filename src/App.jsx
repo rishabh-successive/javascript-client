@@ -10,11 +10,14 @@ import {
 
 import { AuthRoute, PrivateRoute } from './routes';
 import { SnackBarProvider } from './contexts';
+import { ApolloProvider } from '@apollo/react-components';
+import ApolloClient from './lib/apollo-client';
 
 function App() {
   return (
     <>
       <SnackBarProvider>
+      <ApolloProvider client={ApolloClient}>
         <CssBaseline />
         <Router>
           <Switch>
@@ -29,6 +32,7 @@ function App() {
             <PrivateRoute component={NoMatch} />
           </Switch>
         </Router>
+        </ApolloProvider>
       </SnackBarProvider>
     </>
   );
